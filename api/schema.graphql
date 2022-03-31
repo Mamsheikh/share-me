@@ -2,8 +2,25 @@
 ### Do not make changes to this file directly
 
 
+type Category {
+  id: String!
+  name: String!
+  posts: [Post!]!
+}
+
+type Comment {
+  content: String!
+  id: String!
+  post: Post
+  user: User!
+  userId: String!
+}
+
 type Favorite {
   id: String!
+  posts: [Post!]!
+  user: User!
+  userId: String!
 }
 
 type Mutation {
@@ -11,9 +28,15 @@ type Mutation {
 }
 
 type Post {
-  caption: String!
+  about: String!
+  categories: [Category!]!
+  comments: [Comment!]!
+  destination: String!
+  favoriteId: String
   id: String!
-  image: String!
+  title: String!
+  user: User
+  userId: String!
 }
 
 type Query {
@@ -21,9 +44,18 @@ type Query {
   users: [User!]
 }
 
+enum Role {
+  FREE
+  SUBSCRIBED
+}
+
 type User {
+  comments: [Comment!]!
   email: String!
+  favorites: [Favorite!]
   id: String!
   image: String!
   name: String!
+  posts: [Post!]!
+  role: Role!
 }
