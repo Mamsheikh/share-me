@@ -2,6 +2,11 @@
 ### Do not make changes to this file directly
 
 
+type AuthPayload {
+  accessToken: String!
+  user: User!
+}
+
 type Category {
   id: String!
   name: String!
@@ -24,7 +29,7 @@ type Favorite {
 }
 
 type Mutation {
-  createUser: User!
+  googleLogin(tokenId: String!): AuthPayload!
 }
 
 type Post {
