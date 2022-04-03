@@ -49,6 +49,7 @@ type Post {
 type Query {
   getUser: User
   me: User!
+  search(searchTerm: String!): [Post!]!
   users: [User!]
 }
 

@@ -1,0 +1,11 @@
+query SEARCH($searchTerm: String!) {
+  search(searchTerm: $searchTerm) {
+    id
+    title
+    destination
+    user {
+      id
+      image
+    }
+  }
+}

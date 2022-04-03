@@ -117,6 +117,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getUser: NexusGenRootTypes['User'] | null; // User
     me: NexusGenRootTypes['User']; // User!
+    search: NexusGenRootTypes['Post'][]; // [Post!]!
     users: NexusGenRootTypes['User'][] | null; // [User!]
   }
   User: { // field return type
@@ -173,6 +174,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     getUser: 'User'
     me: 'User'
+    search: 'Post'
     users: 'User'
   }
   User: { // field return type name
@@ -191,6 +193,11 @@ export interface NexusGenArgTypes {
   Mutation: {
     googleLogin: { // args
       tokenId: string; // String!
+    }
+  }
+  Query: {
+    search: { // args
+      searchTerm: string; // String!
     }
   }
 }

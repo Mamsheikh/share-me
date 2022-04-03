@@ -1,5 +1,5 @@
 import { UserInputError } from 'apollo-server-core';
-import { extendType, nonNull } from 'nexus';
+import { extendType, nonNull, stringArg } from 'nexus';
 import { getRefreshCookie, createTokens } from '../../utils/auth';
 import { AuthPayload } from '../payloads';
 
@@ -38,6 +38,35 @@ export const UserQueries = extendType({
         // const { accessToken } = await createTokens({ userId: user.id }, ctx);
 
         return user;
+      },
+    });
+
+    t.list.field('search', {
+      type: 'Post',
+      args: {
+        searchTerm: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        try {
+          const query = await ctx.prisma.post.findMany({
+            where: {
+              OR: [
+                { title: { contains: args.searchTerm, mode: 'insensitive' } },
+                { about: { contains: args.searchTerm, mode: 'insensitive' } },
+                {
+                  categories: {
+                    some: {
+                      name: { contains: args.searchTerm, mode: 'insensitive' },
+                    },
+                  },
+                },
+              ],
+            },
+          });
+          return query;
+        } catch (error) {
+          throw new Error(`failed to search pins: ${error}`);
+        }
       },
     });
   },
