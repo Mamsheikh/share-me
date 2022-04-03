@@ -1,6 +1,12 @@
 const { OAuth2Client } = require('google-auth-library');
-import { extendType, nonNull, stringArg } from 'nexus';
-import { createTokens } from '../../utils/auth';
+import { UserInputError } from 'apollo-server-core';
+import { extendType, mutationField, nonNull, stringArg } from 'nexus';
+import {
+  createTokens,
+  getRefreshCookie,
+  removeRefreshCookie,
+} from '../../utils/auth';
+import { User } from '../models';
 import { AuthPayload } from '../payloads';
 
 const oAuth2Client = new OAuth2Client({
@@ -62,6 +68,40 @@ export const UserMutations = extendType({
           throw new Error(`failed to login with google: ${error}`);
         }
       },
+    });
+  },
+});
+
+export const refreshAuth = mutationField('refreshAuth', {
+  type: nonNull(AuthPayload),
+  resolve: async (_root, _args, ctx) => {
+    const refreshCookie = getRefreshCookie(ctx);
+    if (!refreshCookie) throw new Error('invalid cookie');
+
+    const user = await ctx.prisma.user.findFirst({
+      where: { id: refreshCookie.userId },
+    });
+    if (!user) throw new UserInputError('invalid user');
+
+    const { accessToken } = await createTokens({ userId: user.id }, ctx);
+
+    return { user: user, accessToken };
+  },
+});
+
+export const logout = mutationField('logout', {
+  type: nonNull(User),
+  resolve: async (_root, _args, ctx) => {
+    const refreshCookie = getRefreshCookie(ctx);
+    if (!refreshCookie) {
+      throw new Error('invalid cookie');
+    }
+
+    removeRefreshCookie(ctx);
+
+    return await ctx.prisma.user.findFirst({
+      where: { id: refreshCookie.userId },
+      rejectOnNotFound: true,
     });
   },
 });

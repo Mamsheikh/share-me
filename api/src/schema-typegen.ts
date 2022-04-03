@@ -17,7 +17,7 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  Role: "FREE" | "SUBSCRIBED"
+  Role: "ADMIN" | "FREE"
 }
 
 export interface NexusGenScalars {
@@ -100,6 +100,8 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     googleLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    logout: NexusGenRootTypes['User']; // User!
+    refreshAuth: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
   Post: { // field return type
     about: string; // String!
@@ -114,6 +116,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     getUser: NexusGenRootTypes['User'] | null; // User
+    me: NexusGenRootTypes['User']; // User!
     users: NexusGenRootTypes['User'][] | null; // [User!]
   }
   User: { // field return type
@@ -153,6 +156,8 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     googleLogin: 'AuthPayload'
+    logout: 'User'
+    refreshAuth: 'AuthPayload'
   }
   Post: { // field return type name
     about: 'String'
@@ -167,6 +172,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     getUser: 'User'
+    me: 'User'
     users: 'User'
   }
   User: { // field return type name

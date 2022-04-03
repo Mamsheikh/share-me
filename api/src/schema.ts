@@ -1,6 +1,7 @@
 import { applyMiddleware } from 'graphql-middleware';
 import { declarativeWrappingPlugin, makeSchema } from 'nexus';
 import path from 'path';
+import permissions from './permissions';
 import * as types from './resolvers';
 
 export const schema = applyMiddleware(

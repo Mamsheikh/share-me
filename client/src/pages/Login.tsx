@@ -5,11 +5,50 @@ import { FcGoogle } from 'react-icons/fc';
 
 import shareVideo from '../assets/share.mp4';
 import logo from '../assets/logowhite.png';
+import { gql, useMutation, useQuery } from '@apollo/client';
+
+const GOOGLE_LOGIN = gql`
+  mutation GoogleLogin($tokenId: String!) {
+    googleLogin(tokenId: $tokenId) {
+      accessToken
+      user {
+        id
+        image
+        name
+      }
+    }
+  }
+`;
+
+const REFRESH_AUTH = gql`
+  mutation {
+    refreshAuth {
+      accessToken
+      user {
+        name
+        id
+      }
+    }
+  }
+`;
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [googleLogin, { loading, error }] = useMutation(GOOGLE_LOGIN, {
+    onCompleted: (data) => {
+      navigate('/', { replace: true });
+    },
+  });
+  const [refreshAuth] = useMutation(REFRESH_AUTH);
   const responseGoogle = (response: any) => {
-    console.log(response);
+    googleLogin({
+      variables: {
+        tokenId: response.tokenId,
+      },
+    });
+    console.log('tokenId', response.tokenId);
   };
+  console.log(refreshAuth);
   return (
     <div className='flex flex-col h-screen justify-start items-center'>
       <div className='relative w-full h-full'>

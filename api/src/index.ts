@@ -5,12 +5,14 @@ import {
 } from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { schema } from './schema';
 import { createContext } from './context';
 
 const IS_DEV = process.env.NODE_ENV === 'development';
-const localOrigins = [/^http:\/\/localhost:\d{4}$/];
+const localOrigins = 'http://localhost:3000';
+// const localOrigins = [/^http:\/\/localhost:\d{3}$/];
 const prodOrigins = [/^https:\/\/.*\.yourdomain\.com$/];
 
 async function startApolloServer() {
@@ -27,13 +29,15 @@ async function startApolloServer() {
   await server.start();
 
   app.use(cookieParser());
-
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    })
+  );
   server.applyMiddleware({
     app,
-    cors: {
-      origin: IS_DEV ? localOrigins : prodOrigins,
-      credentials: true,
-    },
+    cors: false,
   });
   await new Promise<void>((resolve) => {
     httpServer.listen({ port: 4000 });

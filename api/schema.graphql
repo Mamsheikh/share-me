@@ -30,6 +30,8 @@ type Favorite {
 
 type Mutation {
   googleLogin(tokenId: String!): AuthPayload!
+  logout: User!
+  refreshAuth: AuthPayload!
 }
 
 type Post {
@@ -46,12 +48,13 @@ type Post {
 
 type Query {
   getUser: User
+  me: User!
   users: [User!]
 }
 
 enum Role {
+  ADMIN
   FREE
-  SUBSCRIBED
 }
 
 type User {

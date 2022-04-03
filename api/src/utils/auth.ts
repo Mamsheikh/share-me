@@ -32,7 +32,7 @@ export const createRefreshCookie = (
   const isProd = process.env.NODE_ENV === 'production';
   const cookieOptions: CookieOptions = {
     secure: isProd ? true : false,
-    httpOnly: true,
+    httpOnly: false,
     expires: addMilliseconds(Date.now(), ms(constants.JWT_REFRESH_EXPIRATION)),
     // Same site if frontend and backend are not separate
     // sameSite: true

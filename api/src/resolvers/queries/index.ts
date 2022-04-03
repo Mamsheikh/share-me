@@ -1,4 +1,7 @@
-import { extendType } from 'nexus';
+import { UserInputError } from 'apollo-server-core';
+import { extendType, nonNull } from 'nexus';
+import { getRefreshCookie, createTokens } from '../../utils/auth';
+import { AuthPayload } from '../payloads';
 
 export const UserQueries = extendType({
   type: 'Query',
@@ -18,6 +21,23 @@ export const UserQueries = extendType({
       args: {},
       async resolve(_, args, ctx) {
         return null;
+      },
+    });
+    t.field('me', {
+      type: 'User',
+      resolve: async (_root, _args, ctx) => {
+        const refreshCookie = getRefreshCookie(ctx);
+        if (!refreshCookie) throw new Error('invalid cookie');
+        console.log(refreshCookie);
+        const user = await ctx.prisma.user.findFirst({
+          where: { id: refreshCookie.userId },
+        });
+        // console.log(user);
+        if (!user) throw new UserInputError('not authenticated');
+
+        // const { accessToken } = await createTokens({ userId: user.id }, ctx);
+
+        return user;
       },
     });
   },
