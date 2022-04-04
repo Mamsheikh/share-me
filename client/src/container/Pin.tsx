@@ -20,8 +20,8 @@ export const Pins: React.FC<Props> = ({ user }) => {
       </div>
       <div className='h-full'>
         <Routes>
-          <Route path='/' element={<Feed />} />
-          <Route path='/category//:categoryId' element={<Feed />} />
+          <Route path='/' element={<Feed user={user} />} />
+          <Route path='/category//:categoryId' element={<Feed user={user} />} />
           <Route path='/pin/:pinId' element={<PinDetail user={user} />} />
           <Route path='/create-pin' element={<CreatePin user={user} />} />
           <Route
