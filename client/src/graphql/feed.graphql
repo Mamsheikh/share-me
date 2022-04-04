@@ -1,0 +1,15 @@
+query FEED {
+  feed {
+    id
+    title
+    destination
+    about
+    image
+    save {
+      id
+      user {
+        id
+      }
+    }
+  }
+}

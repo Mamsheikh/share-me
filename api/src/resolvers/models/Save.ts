@@ -1,25 +1,26 @@
 import { objectType } from 'nexus';
 
-export const Favorite = objectType({
-  name: 'Favorite',
+export const Save = objectType({
+  name: 'Save',
   definition(t) {
     t.nonNull.string('id'),
       t.nonNull.string('userId'),
-      t.list.field('posts', {
+      t.nonNull.string('postId'),
+      t.field('post', {
         type: 'Post',
         resolve(root, __, ctx) {
-          return ctx.prisma.favorite
+          return ctx.prisma.save
             .findUnique({
               where: { id: root.id },
               rejectOnNotFound: true,
             })
-            .posts();
+            .post();
         },
       }),
       t.nonNull.field('user', {
         type: 'User',
         resolve(root, __, ctx) {
-          return ctx.prisma.favorite
+          return ctx.prisma.save
             .findUnique({
               where: { id: root.id },
               rejectOnNotFound: true,

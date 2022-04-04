@@ -8,9 +8,6 @@ export const User = objectType({
       t.string('name'),
       t.string('email'),
       t.string('image'),
-      t.field('role', {
-        type: Role,
-      }),
       t.nonNull.list.nonNull.field('posts', {
         type: 'Post',
         async resolve(root, _args, ctx) {
@@ -24,8 +21,8 @@ export const User = objectType({
             .posts();
         },
       });
-    t.nullable.list.field('favorites', {
-      type: 'Favorite',
+    t.nullable.list.field('save', {
+      type: 'Save',
       async resolve(root, _args, ctx) {
         return await ctx.prisma.user
           .findUnique({
@@ -34,7 +31,7 @@ export const User = objectType({
             },
             rejectOnNotFound: true,
           })
-          .favorites();
+          .save();
       },
     });
     t.list.field('comments', {
@@ -49,9 +46,4 @@ export const User = objectType({
       },
     });
   },
-});
-
-const Role = enumType({
-  name: 'Role',
-  members: ['FREE', 'ADMIN'],
 });

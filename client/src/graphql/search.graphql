@@ -7,5 +7,10 @@ query SEARCH($searchTerm: String!) {
       id
       image
     }
+    save {
+      user {
+        id
+      }
+    }
   }
 }

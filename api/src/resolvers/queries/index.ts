@@ -7,12 +7,14 @@ export const UserQueries = extendType({
   type: 'Query',
   definition(t) {
     //users
-    t.nullable.list.nonNull.field('users', {
-      type: 'User',
-      async resolve(_, args, ctx) {
-        return [];
-      },
-    });
+    // t.nullable.list.nonNull.field('users', {
+    //   type: 'User',
+    //   async resolve(_, args, ctx) {
+    //     return ctx.prisma.post.findMany({
+    //       include: { favorite: true },
+    //     });
+    //   },
+    // });
 
     //User by Id
 
@@ -64,6 +66,20 @@ export const UserQueries = extendType({
             },
           });
           return query;
+        } catch (error) {
+          throw new Error(`failed to search pins: ${error}`);
+        }
+      },
+    });
+
+    //Feed
+    t.list.field('feed', {
+      type: 'Post',
+      async resolve(_, _args, ctx) {
+        try {
+          return ctx.prisma.post.findMany({
+            orderBy: { createdAt: 'asc' },
+          });
         } catch (error) {
           throw new Error(`failed to search pins: ${error}`);
         }

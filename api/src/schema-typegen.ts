@@ -17,7 +17,6 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  Role: "ADMIN" | "FREE"
 }
 
 export interface NexusGenScalars {
@@ -42,26 +41,26 @@ export interface NexusGenObjects {
     id: string; // String!
     userId: string; // String!
   }
-  Favorite: { // root type
-    id: string; // String!
-    userId: string; // String!
-  }
   Mutation: {};
   Post: { // root type
     about: string; // String!
     destination: string; // String!
-    favoriteId?: string | null; // String
     id: string; // String!
+    image: string; // String!
     title: string; // String!
     userId: string; // String!
   }
   Query: {};
+  Save: { // root type
+    id: string; // String!
+    postId: string; // String!
+    userId: string; // String!
+  }
   User: { // root type
     email: string; // String!
     id: string; // String!
     image: string; // String!
     name: string; // String!
-    role: NexusGenEnums['Role']; // Role!
   }
 }
 
@@ -73,7 +72,7 @@ export interface NexusGenUnions {
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   AuthPayload: { // field return type
@@ -92,12 +91,6 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
     userId: string; // String!
   }
-  Favorite: { // field return type
-    id: string; // String!
-    posts: NexusGenRootTypes['Post'][]; // [Post!]!
-    user: NexusGenRootTypes['User']; // User!
-    userId: string; // String!
-  }
   Mutation: { // field return type
     googleLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['User']; // User!
@@ -108,27 +101,34 @@ export interface NexusGenFieldTypes {
     categories: NexusGenRootTypes['Category'][]; // [Category!]!
     comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
     destination: string; // String!
-    favoriteId: string | null; // String
     id: string; // String!
+    image: string; // String!
+    save: NexusGenRootTypes['Save'][] | null; // [Save!]
     title: string; // String!
     user: NexusGenRootTypes['User'] | null; // User
     userId: string; // String!
   }
   Query: { // field return type
+    feed: NexusGenRootTypes['Post'][]; // [Post!]!
     getUser: NexusGenRootTypes['User'] | null; // User
     me: NexusGenRootTypes['User']; // User!
     search: NexusGenRootTypes['Post'][]; // [Post!]!
-    users: NexusGenRootTypes['User'][] | null; // [User!]
+  }
+  Save: { // field return type
+    id: string; // String!
+    post: NexusGenRootTypes['Post']; // Post!
+    postId: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+    userId: string; // String!
   }
   User: { // field return type
     comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
     email: string; // String!
-    favorites: NexusGenRootTypes['Favorite'][] | null; // [Favorite!]
     id: string; // String!
     image: string; // String!
     name: string; // String!
     posts: NexusGenRootTypes['Post'][]; // [Post!]!
-    role: NexusGenEnums['Role']; // Role!
+    save: NexusGenRootTypes['Save'][] | null; // [Save!]
   }
 }
 
@@ -149,12 +149,6 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
-  Favorite: { // field return type name
-    id: 'String'
-    posts: 'Post'
-    user: 'User'
-    userId: 'String'
-  }
   Mutation: { // field return type name
     googleLogin: 'AuthPayload'
     logout: 'User'
@@ -165,27 +159,34 @@ export interface NexusGenFieldTypeNames {
     categories: 'Category'
     comments: 'Comment'
     destination: 'String'
-    favoriteId: 'String'
     id: 'String'
+    image: 'String'
+    save: 'Save'
     title: 'String'
     user: 'User'
     userId: 'String'
   }
   Query: { // field return type name
+    feed: 'Post'
     getUser: 'User'
     me: 'User'
     search: 'Post'
-    users: 'User'
+  }
+  Save: { // field return type name
+    id: 'String'
+    post: 'Post'
+    postId: 'String'
+    user: 'User'
+    userId: 'String'
   }
   User: { // field return type name
     comments: 'Comment'
     email: 'String'
-    favorites: 'Favorite'
     id: 'String'
     image: 'String'
     name: 'String'
     posts: 'Post'
-    role: 'Role'
+    save: 'Save'
   }
 }
 
@@ -212,7 +213,7 @@ export type NexusGenObjectNames = keyof NexusGenObjects;
 
 export type NexusGenInputNames = never;
 
-export type NexusGenEnumNames = keyof NexusGenEnums;
+export type NexusGenEnumNames = never;
 
 export type NexusGenInterfaceNames = never;
 

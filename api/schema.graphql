@@ -21,13 +21,6 @@ type Comment {
   userId: String!
 }
 
-type Favorite {
-  id: String!
-  posts: [Post!]!
-  user: User!
-  userId: String!
-}
-
 type Mutation {
   googleLogin(tokenId: String!): AuthPayload!
   logout: User!
@@ -39,32 +32,35 @@ type Post {
   categories: [Category!]!
   comments: [Comment!]!
   destination: String!
-  favoriteId: String
   id: String!
+  image: String!
+  save: [Save!]
   title: String!
   user: User
   userId: String!
 }
 
 type Query {
+  feed: [Post!]!
   getUser: User
   me: User!
   search(searchTerm: String!): [Post!]!
-  users: [User!]
 }
 
-enum Role {
-  ADMIN
-  FREE
+type Save {
+  id: String!
+  post: Post!
+  postId: String!
+  user: User!
+  userId: String!
 }
 
 type User {
   comments: [Comment!]!
   email: String!
-  favorites: [Favorite!]
   id: String!
   image: String!
   name: String!
   posts: [Post!]!
-  role: Role!
+  save: [Save!]
 }

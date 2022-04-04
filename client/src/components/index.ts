@@ -2,6 +2,7 @@ export * from './CreatePin';
 export * from './Feed';
 export * from './MasonryLayout';
 export * from './Navbar';
+export * from './Pin';
 export * from './PinDetail';
 export * from './Search';
 export * from './Sidebar';

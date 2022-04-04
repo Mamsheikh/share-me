@@ -37,14 +37,6 @@ export type Comment = {
   userId: Scalars['String'];
 };
 
-export type Favorite = {
-  __typename?: 'Favorite';
-  id: Scalars['String'];
-  posts: Array<Post>;
-  user: User;
-  userId: Scalars['String'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   googleLogin: AuthPayload;
@@ -63,8 +55,9 @@ export type Post = {
   categories: Array<Category>;
   comments: Array<Comment>;
   destination: Scalars['String'];
-  favoriteId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  image: Scalars['String'];
+  save?: Maybe<Array<Save>>;
   title: Scalars['String'];
   user?: Maybe<User>;
   userId: Scalars['String'];
@@ -72,10 +65,10 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
+  feed: Array<Post>;
   getUser?: Maybe<User>;
   me: User;
   search: Array<Post>;
-  users?: Maybe<Array<User>>;
 };
 
 
@@ -83,22 +76,30 @@ export type QuerySearchArgs = {
   searchTerm: Scalars['String'];
 };
 
-export enum Role {
-  Admin = 'ADMIN',
-  Free = 'FREE'
-}
+export type Save = {
+  __typename?: 'Save';
+  id: Scalars['String'];
+  post: Post;
+  postId: Scalars['String'];
+  user: User;
+  userId: Scalars['String'];
+};
 
 export type User = {
   __typename?: 'User';
   comments: Array<Comment>;
   email: Scalars['String'];
-  favorites?: Maybe<Array<Favorite>>;
   id: Scalars['String'];
   image: Scalars['String'];
   name: Scalars['String'];
   posts: Array<Post>;
-  role: Role;
+  save?: Maybe<Array<Save>>;
 };
+
+export type FeedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FeedQuery = { __typename?: 'Query', feed: Array<{ __typename?: 'Post', id: string, title: string, destination: string, about: string, image: string, save?: Array<{ __typename?: 'Save', id: string, user: { __typename?: 'User', id: string } }> | null }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -110,9 +111,53 @@ export type SearchQueryVariables = Exact<{
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Post', id: string, title: string, destination: string, user?: { __typename?: 'User', id: string, image: string } | null }> };
+export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Post', id: string, title: string, destination: string, user?: { __typename?: 'User', id: string, image: string } | null, save?: Array<{ __typename?: 'Save', user: { __typename?: 'User', id: string } }> | null }> };
 
 
+export const FeedDocument = gql`
+    query FEED {
+  feed {
+    id
+    title
+    destination
+    about
+    image
+    save {
+      id
+      user {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFeedQuery__
+ *
+ * To run a query within a React component, call `useFeedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFeedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFeedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFeedQuery(baseOptions?: Apollo.QueryHookOptions<FeedQuery, FeedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FeedQuery, FeedQueryVariables>(FeedDocument, options);
+      }
+export function useFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeedQuery, FeedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FeedQuery, FeedQueryVariables>(FeedDocument, options);
+        }
+export type FeedQueryHookResult = ReturnType<typeof useFeedQuery>;
+export type FeedLazyQueryHookResult = ReturnType<typeof useFeedLazyQuery>;
+export type FeedQueryResult = Apollo.QueryResult<FeedQuery, FeedQueryVariables>;
 export const MeDocument = gql`
     query ME {
   me {
@@ -159,6 +204,11 @@ export const SearchDocument = gql`
     user {
       id
       image
+    }
+    save {
+      user {
+        id
+      }
     }
   }
 }

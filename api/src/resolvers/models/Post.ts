@@ -8,8 +8,18 @@ export const Post = objectType({
       t.string('title'),
       t.string('about'),
       t.string('destination');
+    t.string('image');
     t.string('userId'),
-      t.nullable.string('favoriteId'),
+      t.nullable.list.field('save', {
+        type: 'Save',
+        async resolve(root, _args, ctx) {
+          return await ctx.prisma.post
+            .findUnique({
+              where: { id: root.id },
+            })
+            .save();
+        },
+      }),
       t.nullable.field('user', {
         type: 'User',
         async resolve(root, _, ctx) {

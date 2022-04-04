@@ -39,7 +39,7 @@ const Login = () => {
       navigate('/', { replace: true });
     },
   });
-  const [refreshAuth] = useMutation(REFRESH_AUTH);
+  // const [refreshAuth] = useMutation(REFRESH_AUTH);
   const responseGoogle = (response: any) => {
     googleLogin({
       variables: {
@@ -48,7 +48,7 @@ const Login = () => {
     });
     console.log('tokenId', response.tokenId);
   };
-  console.log(refreshAuth);
+  // console.log(refreshAuth);
   return (
     <div className='flex flex-col h-screen justify-start items-center'>
       <div className='relative w-full h-full'>
