@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { MdDownloadForOffline } from 'react-icons/md';
 import { AiTwotoneDelete } from 'react-icons/ai';
 import { BsFillArrowUpRightCircleFill } from 'react-icons/bs';
-import { Post } from '../generated/graphql';
+import { Post, useSavePostMutation } from '../generated/graphql';
 import { User } from '../container/Home';
 
 interface Props {
@@ -14,11 +14,19 @@ interface Props {
 
 export const Pin: React.FC<Props> = ({ pin, className, user }) => {
   const navigate = useNavigate();
+  const [savePost] = useSavePostMutation();
   const [postHovered, setPostHovered] = useState(false);
   const [savingPost, setSavingPost] = useState(false);
   const alreadySaved = !!pin?.save.filter((item) => item.user.id === user.id)
     ?.length;
-  console.log('saved', alreadySaved);
+  const toggleSave = async (postId: string, userId: string) => {
+    await savePost({
+      variables: {
+        postId,
+        userId,
+      },
+    });
+  };
   return (
     <div className='m-2'>
       <div
@@ -46,13 +54,23 @@ export const Pin: React.FC<Props> = ({ pin, className, user }) => {
               </div>
               {alreadySaved ? (
                 <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleSave(pin.id, user.id);
+                  }}
                   type='button'
                   className='bg-red-500 opacity-70 hover:opacity-100 text-white px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
                 >
                   {pin?.save.length} Saved
                 </button>
               ) : (
-                <button className='bg-red-500 opacity-70 hover:opacity-100 text-white px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleSave(pin.id, user.id);
+                  }}
+                  className='bg-red-500 opacity-70 hover:opacity-100 text-white px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
+                >
                   Save
                 </button>
               )}

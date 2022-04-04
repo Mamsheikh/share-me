@@ -56,6 +56,10 @@ export interface NexusGenObjects {
     postId: string; // String!
     userId: string; // String!
   }
+  SavePayload: { // root type
+    message: string; // String!
+    success: boolean; // Boolean!
+  }
   User: { // root type
     email: string; // String!
     id: string; // String!
@@ -95,6 +99,7 @@ export interface NexusGenFieldTypes {
     googleLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['User']; // User!
     refreshAuth: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    savePost: NexusGenRootTypes['SavePayload']; // SavePayload!
   }
   Post: { // field return type
     about: string; // String!
@@ -120,6 +125,10 @@ export interface NexusGenFieldTypes {
     postId: string; // String!
     user: NexusGenRootTypes['User']; // User!
     userId: string; // String!
+  }
+  SavePayload: { // field return type
+    message: string; // String!
+    success: boolean; // Boolean!
   }
   User: { // field return type
     comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
@@ -153,6 +162,7 @@ export interface NexusGenFieldTypeNames {
     googleLogin: 'AuthPayload'
     logout: 'User'
     refreshAuth: 'AuthPayload'
+    savePost: 'SavePayload'
   }
   Post: { // field return type name
     about: 'String'
@@ -179,6 +189,10 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  SavePayload: { // field return type name
+    message: 'String'
+    success: 'Boolean'
+  }
   User: { // field return type name
     comments: 'Comment'
     email: 'String'
@@ -194,6 +208,10 @@ export interface NexusGenArgTypes {
   Mutation: {
     googleLogin: { // args
       tokenId: string; // String!
+    }
+    savePost: { // args
+      postId: string; // String!
+      userId: string; // String!
     }
   }
   Query: {

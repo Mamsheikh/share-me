@@ -42,11 +42,18 @@ export type Mutation = {
   googleLogin: AuthPayload;
   logout: User;
   refreshAuth: AuthPayload;
+  savePost: SavePayload;
 };
 
 
 export type MutationGoogleLoginArgs = {
   tokenId: Scalars['String'];
+};
+
+
+export type MutationSavePostArgs = {
+  postId: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type Post = {
@@ -85,6 +92,12 @@ export type Save = {
   userId: Scalars['String'];
 };
 
+export type SavePayload = {
+  __typename?: 'SavePayload';
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
 export type User = {
   __typename?: 'User';
   comments: Array<Comment>;
@@ -112,6 +125,14 @@ export type SearchQueryVariables = Exact<{
 
 
 export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Post', id: string, title: string, destination: string, user?: { __typename?: 'User', id: string, image: string } | null, save?: Array<{ __typename?: 'Save', user: { __typename?: 'User', id: string } }> | null }> };
+
+export type SavePostMutationVariables = Exact<{
+  postId: Scalars['String'];
+  userId: Scalars['String'];
+}>;
+
+
+export type SavePostMutation = { __typename?: 'Mutation', savePost: { __typename?: 'SavePayload', success: boolean, message: string } };
 
 
 export const FeedDocument = gql`
@@ -241,3 +262,38 @@ export function useSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Sea
 export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>;
 export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>;
 export type SearchQueryResult = Apollo.QueryResult<SearchQuery, SearchQueryVariables>;
+export const SavePostDocument = gql`
+    mutation SavePost($postId: String!, $userId: String!) {
+  savePost(postId: $postId, userId: $userId) {
+    success
+    message
+  }
+}
+    `;
+export type SavePostMutationFn = Apollo.MutationFunction<SavePostMutation, SavePostMutationVariables>;
+
+/**
+ * __useSavePostMutation__
+ *
+ * To run a mutation, you first call `useSavePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSavePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [savePostMutation, { data, loading, error }] = useSavePostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useSavePostMutation(baseOptions?: Apollo.MutationHookOptions<SavePostMutation, SavePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SavePostMutation, SavePostMutationVariables>(SavePostDocument, options);
+      }
+export type SavePostMutationHookResult = ReturnType<typeof useSavePostMutation>;
+export type SavePostMutationResult = Apollo.MutationResult<SavePostMutation>;
+export type SavePostMutationOptions = Apollo.BaseMutationOptions<SavePostMutation, SavePostMutationVariables>;

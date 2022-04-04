@@ -25,6 +25,7 @@ type Mutation {
   googleLogin(tokenId: String!): AuthPayload!
   logout: User!
   refreshAuth: AuthPayload!
+  savePost(postId: String!, userId: String!): SavePayload!
 }
 
 type Post {
@@ -53,6 +54,11 @@ type Save {
   postId: String!
   user: User!
   userId: String!
+}
+
+type SavePayload {
+  message: String!
+  success: Boolean!
 }
 
 type User {

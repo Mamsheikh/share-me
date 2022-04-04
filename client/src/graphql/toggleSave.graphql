@@ -1,0 +1,6 @@
+mutation SavePost($postId: String!, $userId: String!) {
+  savePost(postId: $postId, userId: $userId) {
+    success
+    message
+  }
+}

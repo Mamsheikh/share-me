@@ -1,13 +1,13 @@
 const { OAuth2Client } = require('google-auth-library');
 import { UserInputError } from 'apollo-server-core';
-import { extendType, mutationField, nonNull, stringArg } from 'nexus';
+import { arg, extendType, mutationField, nonNull, stringArg } from 'nexus';
 import {
   createTokens,
   getRefreshCookie,
   removeRefreshCookie,
 } from '../../utils/auth';
 import { User } from '../models';
-import { AuthPayload } from '../payloads';
+import { AuthPayload, SavePayload } from '../payloads';
 
 const oAuth2Client = new OAuth2Client({
   clientId: process.env.GOOGLE_ID,
@@ -66,6 +66,48 @@ export const UserMutations = extendType({
           }
         } catch (error) {
           throw new Error(`failed to login with google: ${error}`);
+        }
+      },
+    });
+
+    //Add to saved
+    t.field('savePost', {
+      type: SavePayload,
+      args: { postId: nonNull(stringArg()), userId: nonNull(stringArg()) },
+      async resolve(_, args, ctx) {
+        try {
+          const isExist = await ctx.prisma.save.findFirst({
+            where: { AND: [{ userId: ctx.user?.id }, { postId: args.postId }] },
+          });
+          // console.log('isExist', isExist);
+          // console.log(ctx.user?.id);
+          if (isExist) {
+            await ctx.prisma.save.deleteMany({
+              where: {
+                AND: [{ userId: ctx.user?.id }, { postId: args.postId }],
+              },
+            });
+            return {
+              success: true,
+              message: 'Pin unsaved',
+            };
+          } else {
+            await ctx.prisma.save.create({
+              data: {
+                user: {
+                  connect: { id: args.userId },
+                },
+                post: { connect: { id: args.postId } },
+              },
+            });
+            return {
+              success: true,
+              message: 'Pin Saved',
+            };
+          }
+        } catch (error) {
+          console.log(error);
+          throw new Error(`failed to toggleSave: ${error}`);
         }
       },
     });

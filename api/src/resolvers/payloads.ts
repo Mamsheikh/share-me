@@ -9,3 +9,11 @@ export const AuthPayload = objectType({
     t.string('accessToken');
   },
 });
+
+export const SavePayload = objectType({
+  name: 'SavePayload',
+  definition(t) {
+    t.boolean('success');
+    t.string('message');
+  },
+});
