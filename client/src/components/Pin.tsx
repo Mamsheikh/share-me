@@ -14,10 +14,13 @@ interface Props {
 
 export const Pin: React.FC<Props> = ({ pin, className, user }) => {
   const navigate = useNavigate();
-  const [savePost] = useSavePostMutation();
+  const [savePost, { loading }] = useSavePostMutation({
+    onCompleted: (data) => {
+      window.location.reload();
+    },
+  });
   const [postHovered, setPostHovered] = useState(false);
-  const [savingPost, setSavingPost] = useState(false);
-  const alreadySaved = !!pin?.save.filter((item) => item.user.id === user.id)
+  const alreadySaved = !!pin?.save.filter((item) => item.user?.id === user.id)
     ?.length;
   const toggleSave = async (postId: string, userId: string) => {
     await savePost({
@@ -27,6 +30,7 @@ export const Pin: React.FC<Props> = ({ pin, className, user }) => {
       },
     });
   };
+  // console.log('alreasySaved', );
   return (
     <div className='m-2'>
       <div
@@ -71,13 +75,51 @@ export const Pin: React.FC<Props> = ({ pin, className, user }) => {
                   }}
                   className='bg-red-500 opacity-70 hover:opacity-100 text-white px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
                 >
-                  Save
+                  {loading ? <span>Saving...</span> : <span>Save</span>}
+                </button>
+              )}
+            </div>
+            <div className='flex justify-between items-center gap-2 w-full'>
+              {pin.destination && (
+                <a
+                  href={pin.destination}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:opacity-100 hover:shadow-md'
+                >
+                  <BsFillArrowUpRightCircleFill />
+                  {pin.destination.length > 20
+                    ? pin.destination.slice(8, 20)
+                    : pin.destination.slice(8)}
+                </a>
+              )}
+              {pin.user.id === user.id && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // toggleSave(pin.id, user.id);
+                  }}
+                  type='button'
+                  className='bg-white p-2 opacity-70 hover:opacity-100 text-black   text-base rounded-3xl hover:shadow-md outline-none'
+                >
+                  <AiTwotoneDelete />
                 </button>
               )}
             </div>
           </div>
         )}
       </div>
+      <Link
+        to={`user-profile/${pin?.user?.id}`}
+        className='flex gap-2 mt-2 items-center'
+      >
+        <img
+          className='w-8 h-8 objet-cover rounded-full'
+          src={pin?.user?.image}
+          alt='user'
+        />
+        <p className='font-semibold capitalize'>{pin?.user?.name}</p>
+      </Link>
     </div>
   );
 };

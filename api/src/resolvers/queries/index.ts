@@ -30,7 +30,7 @@ export const UserQueries = extendType({
       resolve: async (_root, _args, ctx) => {
         const refreshCookie = getRefreshCookie(ctx);
         if (!refreshCookie) throw new Error('invalid cookie');
-        console.log(refreshCookie);
+        // console.log(refreshCookie);
         const user = await ctx.prisma.user.findFirst({
           where: { id: refreshCookie.userId },
         });

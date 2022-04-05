@@ -112,7 +112,7 @@ export type User = {
 export type FeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FeedQuery = { __typename?: 'Query', feed: Array<{ __typename?: 'Post', id: string, title: string, destination: string, about: string, image: string, save?: Array<{ __typename?: 'Save', id: string, user: { __typename?: 'User', id: string } }> | null }> };
+export type FeedQuery = { __typename?: 'Query', feed: Array<{ __typename?: 'Post', id: string, title: string, destination: string, about: string, image: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, user: { __typename?: 'User', id: string } }> | null }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -143,6 +143,11 @@ export const FeedDocument = gql`
     destination
     about
     image
+    user {
+      id
+      image
+      name
+    }
     save {
       id
       user {

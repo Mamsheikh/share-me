@@ -1,7 +1,11 @@
 import React from 'react';
-import Loader, { Circles } from 'react-loader-spinner';
+import { Circles } from 'react-loader-spinner';
 
-export const Spinner = ({ message }) => {
+interface Props {
+  message?: string;
+}
+
+export const Spinner: React.FC<Props> = ({ message }) => {
   return (
     <div className='flex flex-col justify-center items-center'>
       <Circles color='#00BFFF' height={50} width={50} />

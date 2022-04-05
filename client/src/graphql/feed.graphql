@@ -5,6 +5,11 @@ query FEED {
     destination
     about
     image
+    user {
+      id
+      image
+      name
+    }
     save {
       id
       user {
