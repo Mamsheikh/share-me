@@ -1,0 +1,7 @@
+mutation CreatePin($input: CreatePinInput!) {
+  createPin(input: $input) {
+    id
+    title
+    image
+  }
+}

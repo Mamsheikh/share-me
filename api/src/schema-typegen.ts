@@ -14,6 +14,13 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CreatePinInput: { // input type
+    about: string; // String!
+    category: string; // String!
+    destination: string; // String!
+    image: string; // String!
+    title: string; // String!
+  }
 }
 
 export interface NexusGenEnums {
@@ -96,6 +103,7 @@ export interface NexusGenFieldTypes {
     userId: string; // String!
   }
   Mutation: { // field return type
+    createPin: NexusGenRootTypes['Post']; // Post!
     googleLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['User']; // User!
     refreshAuth: NexusGenRootTypes['AuthPayload']; // AuthPayload!
@@ -159,6 +167,7 @@ export interface NexusGenFieldTypeNames {
     userId: 'String'
   }
   Mutation: { // field return type name
+    createPin: 'Post'
     googleLogin: 'AuthPayload'
     logout: 'User'
     refreshAuth: 'AuthPayload'
@@ -206,6 +215,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createPin: { // args
+      input: NexusGenInputs['CreatePinInput']; // CreatePinInput!
+    }
     googleLogin: { // args
       tokenId: string; // String!
     }
@@ -229,7 +241,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 

@@ -37,12 +37,26 @@ export type Comment = {
   userId: Scalars['String'];
 };
 
+export type CreatePinInput = {
+  about: Scalars['String'];
+  category: Scalars['String'];
+  destination: Scalars['String'];
+  image: Scalars['String'];
+  title: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createPin: Post;
   googleLogin: AuthPayload;
   logout: User;
   refreshAuth: AuthPayload;
   savePost: SavePayload;
+};
+
+
+export type MutationCreatePinArgs = {
+  input: CreatePinInput;
 };
 
 
@@ -109,6 +123,13 @@ export type User = {
   save?: Maybe<Array<Save>>;
 };
 
+export type CreatePinMutationVariables = Exact<{
+  input: CreatePinInput;
+}>;
+
+
+export type CreatePinMutation = { __typename?: 'Mutation', createPin: { __typename?: 'Post', id: string, title: string, image: string } };
+
 export type FeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -135,6 +156,41 @@ export type SavePostMutationVariables = Exact<{
 export type SavePostMutation = { __typename?: 'Mutation', savePost: { __typename?: 'SavePayload', success: boolean, message: string } };
 
 
+export const CreatePinDocument = gql`
+    mutation CreatePin($input: CreatePinInput!) {
+  createPin(input: $input) {
+    id
+    title
+    image
+  }
+}
+    `;
+export type CreatePinMutationFn = Apollo.MutationFunction<CreatePinMutation, CreatePinMutationVariables>;
+
+/**
+ * __useCreatePinMutation__
+ *
+ * To run a mutation, you first call `useCreatePinMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePinMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPinMutation, { data, loading, error }] = useCreatePinMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePinMutation(baseOptions?: Apollo.MutationHookOptions<CreatePinMutation, CreatePinMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePinMutation, CreatePinMutationVariables>(CreatePinDocument, options);
+      }
+export type CreatePinMutationHookResult = ReturnType<typeof useCreatePinMutation>;
+export type CreatePinMutationResult = Apollo.MutationResult<CreatePinMutation>;
+export type CreatePinMutationOptions = Apollo.BaseMutationOptions<CreatePinMutation, CreatePinMutationVariables>;
 export const FeedDocument = gql`
     query FEED {
   feed {

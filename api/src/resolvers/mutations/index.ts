@@ -6,6 +6,8 @@ import {
   getRefreshCookie,
   removeRefreshCookie,
 } from '../../utils/auth';
+import { authorize } from '../../utils/authorize';
+import { CreatePinInput } from '../inputs';
 import { User } from '../models';
 import { AuthPayload, SavePayload } from '../payloads';
 
@@ -109,6 +111,29 @@ export const UserMutations = extendType({
           console.log(error);
           throw new Error(`failed to toggleSave: ${error}`);
         }
+      },
+    });
+
+    //Create Pin
+
+    t.field('createPin', {
+      type: 'Post',
+      args: {
+        input: nonNull(CreatePinInput),
+      },
+      async resolve(_, args, ctx) {
+        const user = await authorize(ctx);
+
+        return await ctx.prisma.post.create({
+          data: {
+            title: args.input.title,
+            about: args.input.about,
+            destination: args.input.destination,
+            image: args.input.image,
+            user: { connect: { id: user?.id } },
+            category: { create: { name: args.input.category } },
+          },
+        });
       },
     });
   },

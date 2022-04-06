@@ -21,7 +21,16 @@ type Comment {
   userId: String!
 }
 
+input CreatePinInput {
+  about: String!
+  category: String!
+  destination: String!
+  image: String!
+  title: String!
+}
+
 type Mutation {
+  createPin(input: CreatePinInput!): Post!
   googleLogin(tokenId: String!): AuthPayload!
   logout: User!
   refreshAuth: AuthPayload!
