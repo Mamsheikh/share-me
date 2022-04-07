@@ -5,6 +5,9 @@ query GetPin($postId: String!) {
     title
     about
     destination
+    category {
+      name
+    }
     user {
       id
       name

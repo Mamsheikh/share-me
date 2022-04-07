@@ -1,0 +1,26 @@
+query More($category: String!, $postId: String!) {
+  more(category: $category, postId: $postId) {
+    id
+    title
+    image
+    about
+    destination
+    comments {
+      id
+    }
+    # userId
+    save {
+      id
+      user {
+        id
+        name
+        image
+      }
+    }
+    user {
+      id
+      name
+      image
+    }
+  }
+}

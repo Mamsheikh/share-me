@@ -44,15 +44,15 @@ export const Post = objectType({
             .comments();
         },
       });
-    t.list.field('categories', {
+    t.field('category', {
       type: 'Category',
       resolve(root, _, ctx) {
         return ctx.prisma.post
           .findUnique({
             where: { id: root.id },
-            rejectOnNotFound: true,
+            // rejectOnNotFound: true,
           })
-          .categories();
+          .category();
       },
     });
   },

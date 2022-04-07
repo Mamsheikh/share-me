@@ -112,7 +112,7 @@ export interface NexusGenFieldTypes {
   }
   Post: { // field return type
     about: string; // String!
-    categories: NexusGenRootTypes['Category'][]; // [Category!]!
+    category: NexusGenRootTypes['Category']; // Category!
     comments: NexusGenRootTypes['Comment'][]; // [Comment!]!
     destination: string; // String!
     id: string; // String!
@@ -127,6 +127,7 @@ export interface NexusGenFieldTypes {
     getPin: NexusGenRootTypes['Post']; // Post!
     getUser: NexusGenRootTypes['User'] | null; // User
     me: NexusGenRootTypes['User']; // User!
+    more: NexusGenRootTypes['Post'][]; // [Post!]!
     search: NexusGenRootTypes['Post'][]; // [Post!]!
   }
   Save: { // field return type
@@ -178,7 +179,7 @@ export interface NexusGenFieldTypeNames {
   }
   Post: { // field return type name
     about: 'String'
-    categories: 'Category'
+    category: 'Category'
     comments: 'Comment'
     destination: 'String'
     id: 'String'
@@ -193,6 +194,7 @@ export interface NexusGenFieldTypeNames {
     getPin: 'Post'
     getUser: 'User'
     me: 'User'
+    more: 'Post'
     search: 'Post'
   }
   Save: { // field return type name
@@ -236,6 +238,10 @@ export interface NexusGenArgTypes {
   }
   Query: {
     getPin: { // args
+      postId: string; // String!
+    }
+    more: { // args
+      category: string; // String!
       postId: string; // String!
     }
     search: { // args

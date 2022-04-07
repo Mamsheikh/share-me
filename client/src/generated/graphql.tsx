@@ -80,7 +80,7 @@ export type MutationSavePostArgs = {
 export type Post = {
   __typename?: 'Post';
   about: Scalars['String'];
-  categories: Array<Category>;
+  category: Category;
   comments: Array<Comment>;
   destination: Scalars['String'];
   id: Scalars['String'];
@@ -97,11 +97,18 @@ export type Query = {
   getPin: Post;
   getUser?: Maybe<User>;
   me: User;
+  more: Array<Post>;
   search: Array<Post>;
 };
 
 
 export type QueryGetPinArgs = {
+  postId: Scalars['String'];
+};
+
+
+export type QueryMoreArgs = {
+  category: Scalars['String'];
   postId: Scalars['String'];
 };
 
@@ -161,12 +168,20 @@ export type GetPinQueryVariables = Exact<{
 }>;
 
 
-export type GetPinQuery = { __typename?: 'Query', getPin: { __typename?: 'Post', id: string, image: string, title: string, about: string, destination: string, user?: { __typename?: 'User', id: string, name: string, image: string } | null, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', id: string, name: string, image: string } }> } };
+export type GetPinQuery = { __typename?: 'Query', getPin: { __typename?: 'Post', id: string, image: string, title: string, about: string, destination: string, category: { __typename?: 'Category', name: string }, user?: { __typename?: 'User', id: string, name: string, image: string } | null, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', id: string, name: string, image: string } }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, name: string, image: string, email: string } };
+
+export type MoreQueryVariables = Exact<{
+  category: Scalars['String'];
+  postId: Scalars['String'];
+}>;
+
+
+export type MoreQuery = { __typename?: 'Query', more: Array<{ __typename?: 'Post', id: string, title: string, image: string, about: string, destination: string, comments: Array<{ __typename?: 'Comment', id: string }>, save?: Array<{ __typename?: 'Save', id: string, user: { __typename?: 'User', id: string, name: string, image: string } }> | null, user?: { __typename?: 'User', id: string, name: string, image: string } | null }> };
 
 export type SearchQueryVariables = Exact<{
   searchTerm: Scalars['String'];
@@ -319,6 +334,9 @@ export const GetPinDocument = gql`
     title
     about
     destination
+    category {
+      name
+    }
     user {
       id
       name
@@ -401,6 +419,62 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MoreDocument = gql`
+    query More($category: String!, $postId: String!) {
+  more(category: $category, postId: $postId) {
+    id
+    title
+    image
+    about
+    destination
+    comments {
+      id
+    }
+    save {
+      id
+      user {
+        id
+        name
+        image
+      }
+    }
+    user {
+      id
+      name
+      image
+    }
+  }
+}
+    `;
+
+/**
+ * __useMoreQuery__
+ *
+ * To run a query within a React component, call `useMoreQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMoreQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMoreQuery({
+ *   variables: {
+ *      category: // value for 'category'
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useMoreQuery(baseOptions: Apollo.QueryHookOptions<MoreQuery, MoreQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MoreQuery, MoreQueryVariables>(MoreDocument, options);
+      }
+export function useMoreLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MoreQuery, MoreQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MoreQuery, MoreQueryVariables>(MoreDocument, options);
+        }
+export type MoreQueryHookResult = ReturnType<typeof useMoreQuery>;
+export type MoreLazyQueryHookResult = ReturnType<typeof useMoreLazyQuery>;
+export type MoreQueryResult = Apollo.QueryResult<MoreQuery, MoreQueryVariables>;
 export const SearchDocument = gql`
     query SEARCH($searchTerm: String!) {
   search(searchTerm: $searchTerm) {

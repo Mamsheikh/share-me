@@ -9,6 +9,8 @@ declare interface Pin {
     id;
     user: {
       id;
+      name;
+      image;
     };
   };
   title: string;
@@ -17,5 +19,5 @@ declare interface Pin {
     name: string;
     image: string;
   };
-  userId: string;
+  // userId: string;
 }

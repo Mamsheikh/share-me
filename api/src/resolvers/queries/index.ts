@@ -102,5 +102,22 @@ export const UserQueries = extendType({
         }
       },
     });
+
+    t.list.field('more', {
+      type: 'Post',
+      args: {
+        category: nonNull(stringArg()),
+        postId: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        return ctx.prisma.post.findMany({
+          take: 10,
+          where: {
+            category: { is: { name: args.category } },
+            NOT: { id: args.postId },
+          },
+        });
+      },
+    });
   },
 });

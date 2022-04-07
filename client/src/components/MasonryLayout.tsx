@@ -5,8 +5,8 @@ import { User } from '../container/Home';
 import { Post } from '../generated/graphql';
 
 interface Props {
-  pins: Post[];
-  user: User;
+  pins: any;
+  user?: User;
 }
 
 const breakPoints = {

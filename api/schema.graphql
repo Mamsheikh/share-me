@@ -40,7 +40,7 @@ type Mutation {
 
 type Post {
   about: String!
-  categories: [Category!]!
+  category: Category!
   comments: [Comment!]!
   destination: String!
   id: String!
@@ -56,6 +56,7 @@ type Query {
   getPin(postId: String!): Post!
   getUser: User
   me: User!
+  more(category: String!, postId: String!): [Post!]!
   search(searchTerm: String!): [Post!]!
 }
 
