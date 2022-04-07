@@ -56,10 +56,8 @@ export const UserQueries = extendType({
                 { title: { contains: args.searchTerm, mode: 'insensitive' } },
                 { about: { contains: args.searchTerm, mode: 'insensitive' } },
                 {
-                  categories: {
-                    some: {
-                      name: { contains: args.searchTerm, mode: 'insensitive' },
-                    },
+                  category: {
+                    name: { contains: args.searchTerm, mode: 'insensitive' },
                   },
                 },
               ],
@@ -82,6 +80,25 @@ export const UserQueries = extendType({
           });
         } catch (error) {
           throw new Error(`failed to search pins: ${error}`);
+        }
+      },
+    });
+
+    //Get signle PinDetail
+    t.field('getPin', {
+      type: 'Post',
+      args: {
+        postId: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        try {
+          const post = await ctx.prisma.post.findUnique({
+            where: { id: args.postId },
+            rejectOnNotFound: true,
+          });
+          return post;
+        } catch (error) {
+          throw new Error(`failed to getSinglePost: ${error}`);
         }
       },
     });

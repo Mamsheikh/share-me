@@ -30,6 +30,7 @@ input CreatePinInput {
 }
 
 type Mutation {
+  addComment(content: String!, postId: String!): Comment!
   createPin(input: CreatePinInput!): Post!
   googleLogin(tokenId: String!): AuthPayload!
   logout: User!
@@ -52,6 +53,7 @@ type Post {
 
 type Query {
   feed: [Post!]!
+  getPin(postId: String!): Post!
   getUser: User
   me: User!
   search(searchTerm: String!): [Post!]!

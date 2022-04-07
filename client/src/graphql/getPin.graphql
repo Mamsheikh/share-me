@@ -1,0 +1,23 @@
+query GetPin($postId: String!) {
+  getPin(postId: $postId) {
+    id
+    image
+    title
+    about
+    destination
+    user {
+      id
+      name
+      image
+    }
+    comments {
+      id
+      content
+      user {
+        id
+        name
+        image
+      }
+    }
+  }
+}

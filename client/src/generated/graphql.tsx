@@ -47,11 +47,18 @@ export type CreatePinInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addComment: Comment;
   createPin: Post;
   googleLogin: AuthPayload;
   logout: User;
   refreshAuth: AuthPayload;
   savePost: SavePayload;
+};
+
+
+export type MutationAddCommentArgs = {
+  content: Scalars['String'];
+  postId: Scalars['String'];
 };
 
 
@@ -87,9 +94,15 @@ export type Post = {
 export type Query = {
   __typename?: 'Query';
   feed: Array<Post>;
+  getPin: Post;
   getUser?: Maybe<User>;
   me: User;
   search: Array<Post>;
+};
+
+
+export type QueryGetPinArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -123,6 +136,14 @@ export type User = {
   save?: Maybe<Array<Save>>;
 };
 
+export type AddCommentMutationVariables = Exact<{
+  postId: Scalars['String'];
+  content: Scalars['String'];
+}>;
+
+
+export type AddCommentMutation = { __typename?: 'Mutation', addComment: { __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', id: string, name: string, image: string }, post?: { __typename?: 'Post', id: string } | null } };
+
 export type CreatePinMutationVariables = Exact<{
   input: CreatePinInput;
 }>;
@@ -134,6 +155,13 @@ export type FeedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FeedQuery = { __typename?: 'Query', feed: Array<{ __typename?: 'Post', id: string, title: string, destination: string, about: string, image: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, user: { __typename?: 'User', id: string } }> | null }> };
+
+export type GetPinQueryVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type GetPinQuery = { __typename?: 'Query', getPin: { __typename?: 'Post', id: string, image: string, title: string, about: string, destination: string, user?: { __typename?: 'User', id: string, name: string, image: string } | null, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', id: string, name: string, image: string } }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -156,6 +184,49 @@ export type SavePostMutationVariables = Exact<{
 export type SavePostMutation = { __typename?: 'Mutation', savePost: { __typename?: 'SavePayload', success: boolean, message: string } };
 
 
+export const AddCommentDocument = gql`
+    mutation AddComment($postId: String!, $content: String!) {
+  addComment(postId: $postId, content: $content) {
+    id
+    content
+    user {
+      id
+      name
+      image
+    }
+    post {
+      id
+    }
+  }
+}
+    `;
+export type AddCommentMutationFn = Apollo.MutationFunction<AddCommentMutation, AddCommentMutationVariables>;
+
+/**
+ * __useAddCommentMutation__
+ *
+ * To run a mutation, you first call `useAddCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCommentMutation, { data, loading, error }] = useAddCommentMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useAddCommentMutation(baseOptions?: Apollo.MutationHookOptions<AddCommentMutation, AddCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddCommentMutation, AddCommentMutationVariables>(AddCommentDocument, options);
+      }
+export type AddCommentMutationHookResult = ReturnType<typeof useAddCommentMutation>;
+export type AddCommentMutationResult = Apollo.MutationResult<AddCommentMutation>;
+export type AddCommentMutationOptions = Apollo.BaseMutationOptions<AddCommentMutation, AddCommentMutationVariables>;
 export const CreatePinDocument = gql`
     mutation CreatePin($input: CreatePinInput!) {
   createPin(input: $input) {
@@ -240,6 +311,59 @@ export function useFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeedQ
 export type FeedQueryHookResult = ReturnType<typeof useFeedQuery>;
 export type FeedLazyQueryHookResult = ReturnType<typeof useFeedLazyQuery>;
 export type FeedQueryResult = Apollo.QueryResult<FeedQuery, FeedQueryVariables>;
+export const GetPinDocument = gql`
+    query GetPin($postId: String!) {
+  getPin(postId: $postId) {
+    id
+    image
+    title
+    about
+    destination
+    user {
+      id
+      name
+      image
+    }
+    comments {
+      id
+      content
+      user {
+        id
+        name
+        image
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPinQuery__
+ *
+ * To run a query within a React component, call `useGetPinQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPinQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPinQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useGetPinQuery(baseOptions: Apollo.QueryHookOptions<GetPinQuery, GetPinQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPinQuery, GetPinQueryVariables>(GetPinDocument, options);
+      }
+export function useGetPinLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPinQuery, GetPinQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPinQuery, GetPinQueryVariables>(GetPinDocument, options);
+        }
+export type GetPinQueryHookResult = ReturnType<typeof useGetPinQuery>;
+export type GetPinLazyQueryHookResult = ReturnType<typeof useGetPinLazyQuery>;
+export type GetPinQueryResult = Apollo.QueryResult<GetPinQuery, GetPinQueryVariables>;
 export const MeDocument = gql`
     query ME {
   me {

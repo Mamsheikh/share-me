@@ -136,6 +136,31 @@ export const UserMutations = extendType({
         });
       },
     });
+
+    //Add Comment
+
+    t.field('addComment', {
+      type: 'Comment',
+      args: {
+        postId: nonNull(stringArg()),
+        content: nonNull(stringArg()),
+      },
+      async resolve(_, args, ctx) {
+        const user = await authorize(ctx);
+        try {
+          const comment = await ctx.prisma.comment.create({
+            data: {
+              content: args.content,
+              post: { connect: { id: args.postId } },
+              user: { connect: { id: user?.id } },
+            },
+          });
+          return comment;
+        } catch (error) {
+          throw new Error(`failed to create comment: ${error}`);
+        }
+      },
+    });
   },
 });
 

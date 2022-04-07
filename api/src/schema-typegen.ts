@@ -103,6 +103,7 @@ export interface NexusGenFieldTypes {
     userId: string; // String!
   }
   Mutation: { // field return type
+    addComment: NexusGenRootTypes['Comment']; // Comment!
     createPin: NexusGenRootTypes['Post']; // Post!
     googleLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['User']; // User!
@@ -123,6 +124,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
+    getPin: NexusGenRootTypes['Post']; // Post!
     getUser: NexusGenRootTypes['User'] | null; // User
     me: NexusGenRootTypes['User']; // User!
     search: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -167,6 +169,7 @@ export interface NexusGenFieldTypeNames {
     userId: 'String'
   }
   Mutation: { // field return type name
+    addComment: 'Comment'
     createPin: 'Post'
     googleLogin: 'AuthPayload'
     logout: 'User'
@@ -187,6 +190,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     feed: 'Post'
+    getPin: 'Post'
     getUser: 'User'
     me: 'User'
     search: 'Post'
@@ -215,6 +219,10 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addComment: { // args
+      content: string; // String!
+      postId: string; // String!
+    }
     createPin: { // args
       input: NexusGenInputs['CreatePinInput']; // CreatePinInput!
     }
@@ -227,6 +235,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    getPin: { // args
+      postId: string; // String!
+    }
     search: { // args
       searchTerm: string; // String!
     }
