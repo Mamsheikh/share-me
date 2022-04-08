@@ -1,0 +1,31 @@
+query GetUser($userId: String!) {
+  getUser(userId: $userId) {
+    id
+    name
+    image
+    save {
+      id
+      post {
+        title
+      }
+    }
+    posts {
+      id
+      title
+      about
+      destination
+      image
+      user {
+        id
+        image
+        name
+      }
+      save {
+        id
+        user {
+          id
+        }
+      }
+    }
+  }
+}

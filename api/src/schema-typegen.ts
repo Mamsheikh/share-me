@@ -240,6 +240,9 @@ export interface NexusGenArgTypes {
     getPin: { // args
       postId: string; // String!
     }
+    getUser: { // args
+      userId: string; // String!
+    }
     more: { // args
       category: string; // String!
       postId: string; // String!

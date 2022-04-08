@@ -54,7 +54,7 @@ type Post {
 type Query {
   feed: [Post!]!
   getPin(postId: String!): Post!
-  getUser: User
+  getUser(userId: String!): User
   me: User!
   more(category: String!, postId: String!): [Post!]!
   search(searchTerm: String!): [Post!]!

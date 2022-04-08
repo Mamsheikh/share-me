@@ -20,7 +20,7 @@ export const Pin: React.FC<Props> = ({ pin, className, user }) => {
     },
   });
   const [postHovered, setPostHovered] = useState(false);
-  const alreadySaved = !!pin?.save.filter((item) => item.user?.id === user.id)
+  const alreadySaved = !!pin?.save.filter((item) => item.user?.id === user?.id)
     ?.length;
   const toggleSave = async (postId: string, userId: string) => {
     await savePost({
@@ -93,7 +93,7 @@ export const Pin: React.FC<Props> = ({ pin, className, user }) => {
                     : pin.destination}
                 </a>
               )}
-              {pin.user.id === user.id && (
+              {pin.user?.id === user?.id && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();

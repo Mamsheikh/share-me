@@ -20,9 +20,22 @@ export const UserQueries = extendType({
 
     t.nullable.field('getUser', {
       type: 'User',
-      args: {},
+      args: {
+        userId: nonNull(stringArg()),
+      },
       async resolve(_, args, ctx) {
-        return null;
+        try {
+          if (!args.userId) {
+            throw new Error('please provide userId');
+          }
+          const user = await ctx.prisma.user.findUnique({
+            where: { id: args.userId },
+            rejectOnNotFound: true,
+          });
+          return user;
+        } catch (error) {
+          throw new Error(`failed to query user: ${error}`);
+        }
       },
     });
     t.field('me', {

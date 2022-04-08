@@ -107,6 +107,11 @@ export type QueryGetPinArgs = {
 };
 
 
+export type QueryGetUserArgs = {
+  userId: Scalars['String'];
+};
+
+
 export type QueryMoreArgs = {
   category: Scalars['String'];
   postId: Scalars['String'];
@@ -169,6 +174,13 @@ export type GetPinQueryVariables = Exact<{
 
 
 export type GetPinQuery = { __typename?: 'Query', getPin: { __typename?: 'Post', id: string, image: string, title: string, about: string, destination: string, category: { __typename?: 'Category', name: string }, user?: { __typename?: 'User', id: string, name: string, image: string } | null, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', id: string, name: string, image: string } }> } };
+
+export type GetUserQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, name: string, image: string, save?: Array<{ __typename?: 'Save', id: string, post: { __typename?: 'Post', title: string } }> | null, posts: Array<{ __typename?: 'Post', id: string, title: string, about: string, destination: string, image: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, user: { __typename?: 'User', id: string } }> | null }> } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -382,6 +394,67 @@ export function useGetPinLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Get
 export type GetPinQueryHookResult = ReturnType<typeof useGetPinQuery>;
 export type GetPinLazyQueryHookResult = ReturnType<typeof useGetPinLazyQuery>;
 export type GetPinQueryResult = Apollo.QueryResult<GetPinQuery, GetPinQueryVariables>;
+export const GetUserDocument = gql`
+    query GetUser($userId: String!) {
+  getUser(userId: $userId) {
+    id
+    name
+    image
+    save {
+      id
+      post {
+        title
+      }
+    }
+    posts {
+      id
+      title
+      about
+      destination
+      image
+      user {
+        id
+        image
+        name
+      }
+      save {
+        id
+        user {
+          id
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+      }
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
 export const MeDocument = gql`
     query ME {
   me {
