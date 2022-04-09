@@ -180,7 +180,7 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, name: string, image: string, save?: Array<{ __typename?: 'Save', id: string, post: { __typename?: 'Post', title: string } }> | null, posts: Array<{ __typename?: 'Post', id: string, title: string, about: string, destination: string, image: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, user: { __typename?: 'User', id: string } }> | null }> } | null };
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, name: string, image: string, save?: Array<{ __typename?: 'Save', post: { __typename?: 'Post', id: string, title: string, about: string, image: string, destination: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, post: { __typename?: 'Post', id: string, title: string, about: string, image: string, destination: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null }, user: { __typename?: 'User', id: string } }> | null } }> | null, posts: Array<{ __typename?: 'Post', id: string, title: string, about: string, destination: string, image: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, post: { __typename?: 'Post', id: string, title: string, about: string, image: string, destination: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null }, user: { __typename?: 'User', id: string } }> | null }> } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -401,9 +401,35 @@ export const GetUserDocument = gql`
     name
     image
     save {
-      id
       post {
+        id
         title
+        about
+        image
+        destination
+        user {
+          id
+          image
+          name
+        }
+        save {
+          id
+          post {
+            id
+            title
+            about
+            image
+            destination
+            user {
+              id
+              image
+              name
+            }
+          }
+          user {
+            id
+          }
+        }
       }
     }
     posts {
@@ -419,6 +445,18 @@ export const GetUserDocument = gql`
       }
       save {
         id
+        post {
+          id
+          title
+          about
+          image
+          destination
+          user {
+            id
+            image
+            name
+          }
+        }
         user {
           id
         }

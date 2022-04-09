@@ -30,16 +30,21 @@ export const UserProfile: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (text === 'Created') {
+    if (activeBtn === 'created') {
       setPins(data?.getUser?.posts);
     } else {
-      setPins(data?.getUser?.save);
+      let saves = [];
+      data?.getUser?.save.map((pin) => saves.push(pin.post));
+      setPins(saves);
     }
-  }, [data?.getUser, text]);
+  }, [data?.getUser, activeBtn]);
+  // console.log('save', data?.getUser?.save.);
+  // console.log('created', data?.getUser?.posts);
 
   if (loading) {
     return <Spinner message='Loading Profile...' />;
   }
+
   return (
     <div className='relative pb-2 h-full justify-center items-center'>
       <div className='flex flex-col pb-5'>

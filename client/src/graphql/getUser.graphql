@@ -4,9 +4,35 @@ query GetUser($userId: String!) {
     name
     image
     save {
-      id
       post {
+        id
         title
+        about
+        image
+        destination
+        user {
+          id
+          image
+          name
+        }
+        save {
+          id
+          post {
+            id
+            title
+            about
+            image
+            destination
+            user {
+              id
+              image
+              name
+            }
+          }
+          user {
+            id
+          }
+        }
       }
     }
     posts {
@@ -22,6 +48,18 @@ query GetUser($userId: String!) {
       }
       save {
         id
+        post {
+          id
+          title
+          about
+          image
+          destination
+          user {
+            id
+            image
+            name
+          }
+        }
         user {
           id
         }
