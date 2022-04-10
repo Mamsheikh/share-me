@@ -49,6 +49,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addComment: Comment;
   createPin: Post;
+  deletePin: Post;
   googleLogin: AuthPayload;
   logout: User;
   refreshAuth: AuthPayload;
@@ -64,6 +65,11 @@ export type MutationAddCommentArgs = {
 
 export type MutationCreatePinArgs = {
   input: CreatePinInput;
+};
+
+
+export type MutationDeletePinArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -162,6 +168,13 @@ export type CreatePinMutationVariables = Exact<{
 
 
 export type CreatePinMutation = { __typename?: 'Mutation', createPin: { __typename?: 'Post', id: string, title: string, image: string } };
+
+export type DeletePinMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type DeletePinMutation = { __typename?: 'Mutation', deletePin: { __typename?: 'Post', id: string, title: string, about: string, image: string } };
 
 export type FeedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -294,6 +307,42 @@ export function useCreatePinMutation(baseOptions?: Apollo.MutationHookOptions<Cr
 export type CreatePinMutationHookResult = ReturnType<typeof useCreatePinMutation>;
 export type CreatePinMutationResult = Apollo.MutationResult<CreatePinMutation>;
 export type CreatePinMutationOptions = Apollo.BaseMutationOptions<CreatePinMutation, CreatePinMutationVariables>;
+export const DeletePinDocument = gql`
+    mutation DeletePin($postId: String!) {
+  deletePin(postId: $postId) {
+    id
+    title
+    about
+    image
+  }
+}
+    `;
+export type DeletePinMutationFn = Apollo.MutationFunction<DeletePinMutation, DeletePinMutationVariables>;
+
+/**
+ * __useDeletePinMutation__
+ *
+ * To run a mutation, you first call `useDeletePinMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePinMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePinMutation, { data, loading, error }] = useDeletePinMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useDeletePinMutation(baseOptions?: Apollo.MutationHookOptions<DeletePinMutation, DeletePinMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePinMutation, DeletePinMutationVariables>(DeletePinDocument, options);
+      }
+export type DeletePinMutationHookResult = ReturnType<typeof useDeletePinMutation>;
+export type DeletePinMutationResult = Apollo.MutationResult<DeletePinMutation>;
+export type DeletePinMutationOptions = Apollo.BaseMutationOptions<DeletePinMutation, DeletePinMutationVariables>;
 export const FeedDocument = gql`
     query FEED {
   feed {

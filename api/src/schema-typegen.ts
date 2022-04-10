@@ -105,6 +105,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addComment: NexusGenRootTypes['Comment']; // Comment!
     createPin: NexusGenRootTypes['Post']; // Post!
+    deletePin: NexusGenRootTypes['Post']; // Post!
     googleLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['User']; // User!
     refreshAuth: NexusGenRootTypes['AuthPayload']; // AuthPayload!
@@ -172,6 +173,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addComment: 'Comment'
     createPin: 'Post'
+    deletePin: 'Post'
     googleLogin: 'AuthPayload'
     logout: 'User'
     refreshAuth: 'AuthPayload'
@@ -227,6 +229,9 @@ export interface NexusGenArgTypes {
     }
     createPin: { // args
       input: NexusGenInputs['CreatePinInput']; // CreatePinInput!
+    }
+    deletePin: { // args
+      postId: string; // String!
     }
     googleLogin: { // args
       tokenId: string; // String!

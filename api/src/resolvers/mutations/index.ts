@@ -137,6 +137,32 @@ export const UserMutations = extendType({
       },
     });
 
+    //Delete Pin
+
+    t.field('deletePin', {
+      type: 'Post',
+      args: {
+        postId: nonNull(stringArg()),
+      },
+      async resolve(_root, args, ctx) {
+        try {
+          const viewer = await authorize(ctx);
+          const post = await ctx.prisma.post.findUnique({
+            where: { id: args.postId },
+            rejectOnNotFound: true,
+          });
+          if (post.userId !== viewer?.id) {
+            throw 'not your post';
+          }
+          return await ctx.prisma.post.delete({
+            where: { id: args.postId },
+          });
+        } catch (error) {
+          throw new Error(`failed to delete pin: ${error}`);
+        }
+      },
+    });
+
     //Add Comment
 
     t.field('addComment', {

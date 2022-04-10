@@ -1,0 +1,8 @@
+mutation DeletePin($postId: String!) {
+  deletePin(postId: $postId) {
+    id
+    title
+    about
+    image
+  }
+}

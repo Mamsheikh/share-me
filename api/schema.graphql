@@ -32,6 +32,7 @@ input CreatePinInput {
 type Mutation {
   addComment(content: String!, postId: String!): Comment!
   createPin(input: CreatePinInput!): Post!
+  deletePin(postId: String!): Post!
   googleLogin(tokenId: String!): AuthPayload!
   logout: User!
   refreshAuth: AuthPayload!
