@@ -110,7 +110,7 @@ export const Pin: React.FC<Props> = ({ pin, className, user }) => {
         )}
       </div>
       <Link
-        to={`user-profile/${pin?.user?.id}`}
+        to={`/user-profile/${pin?.user?.id}`}
         className='flex gap-2 mt-2 items-center'
       >
         <img

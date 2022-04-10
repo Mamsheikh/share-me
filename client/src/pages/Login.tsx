@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
@@ -6,6 +6,7 @@ import { FcGoogle } from 'react-icons/fc';
 import shareVideo from '../assets/share.mp4';
 import logo from '../assets/logowhite.png';
 import { gql, useMutation, useQuery } from '@apollo/client';
+import { User } from '../container/Home';
 
 const GOOGLE_LOGIN = gql`
   mutation GoogleLogin($tokenId: String!) {
@@ -32,8 +33,17 @@ const REFRESH_AUTH = gql`
   }
 `;
 
-const Login = () => {
+interface Props {
+  user: User;
+}
+
+const Login: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [navigate, user]);
   const [googleLogin, { loading, error }] = useMutation(GOOGLE_LOGIN, {
     onCompleted: (data) => {
       navigate('/', { replace: true });
@@ -46,7 +56,7 @@ const Login = () => {
         tokenId: response.tokenId,
       },
     });
-    console.log('tokenId', response.tokenId);
+    // console.log('tokenId', response.tokenId);
   };
   // console.log(refreshAuth);
   return (

@@ -3,11 +3,15 @@ query SEARCH($searchTerm: String!) {
     id
     title
     destination
+    about
+    image
     user {
       id
       image
+      name
     }
     save {
+      id
       user {
         id
       }

@@ -10,6 +10,9 @@
     "generate:nexus": "ts-node --transpile-only src/schema",
     "generate:prisma": "prisma generate"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts --transpile-only"
+  },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
     "@types/jsonwebtoken": "^8.5.8",

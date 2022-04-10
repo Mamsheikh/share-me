@@ -68,7 +68,7 @@ export const PinDetail: React.FC<Props> = () => {
   return (
     <>
       <div
-        className='flex xl-flex-row flex-col m-auto bg-white'
+        className='flex xl:flex-row flex-col m-auto bg-white'
         style={{ maxWidth: '1500px', borderRadius: '32px' }}
       >
         <div className='flex justify-center items-center md:items-start flex-initial'>

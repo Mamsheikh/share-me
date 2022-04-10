@@ -3,7 +3,7 @@ import { AiOutlineLogout } from 'react-icons/ai';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MasonryLayout, Spinner } from '../components';
 import { User } from '../container/Home';
-import { useGetUserQuery } from '../generated/graphql';
+import { useGetUserQuery, useLogoutMutation } from '../generated/graphql';
 
 const randomImage =
   'https://source.unsplash.com/1600x900/?nature,photography,technology';
@@ -17,6 +17,12 @@ interface Props {
 }
 
 export const UserProfile: React.FC<Props> = ({ user }) => {
+  const [logout] = useLogoutMutation({
+    onCompleted: (data) => {
+      navigate('/login');
+      window.location.reload();
+    },
+  });
   const { userId } = useParams();
   const { data, loading } = useGetUserQuery({
     variables: {
@@ -65,7 +71,10 @@ export const UserProfile: React.FC<Props> = ({ user }) => {
             </h1>
             <div className='absolute top-0 z-1 right-0 p-2'>
               {user?.id === data?.getUser?.id && (
-                <button className='bg-white p-2 rounded-full cursor-pointer outline-none shadow-md'>
+                <button
+                  onClick={() => logout()}
+                  className='bg-white p-2 rounded-full cursor-pointer outline-none shadow-md'
+                >
                   <AiOutlineLogout color='red' size={21} />
                 </button>
               )}

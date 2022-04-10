@@ -131,7 +131,7 @@ export const UserMutations = extendType({
             destination: args.input.destination,
             image: args.input.image,
             user: { connect: { id: user?.id } },
-            category: { create: { name: args.input.category } },
+            category: { connect: { name: args.input.category } },
           },
         });
       },

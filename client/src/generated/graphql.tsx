@@ -182,6 +182,11 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, name: string, image: string, save?: Array<{ __typename?: 'Save', post: { __typename?: 'Post', id: string, title: string, about: string, image: string, destination: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, post: { __typename?: 'Post', id: string, title: string, about: string, image: string, destination: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null }, user: { __typename?: 'User', id: string } }> | null } }> | null, posts: Array<{ __typename?: 'Post', id: string, title: string, about: string, destination: string, image: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, post: { __typename?: 'Post', id: string, title: string, about: string, image: string, destination: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null }, user: { __typename?: 'User', id: string } }> | null }> } | null };
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename?: 'User', id: string } };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -200,7 +205,7 @@ export type SearchQueryVariables = Exact<{
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Post', id: string, title: string, destination: string, user?: { __typename?: 'User', id: string, image: string } | null, save?: Array<{ __typename?: 'Save', user: { __typename?: 'User', id: string } }> | null }> };
+export type SearchQuery = { __typename?: 'Query', search: Array<{ __typename?: 'Post', id: string, title: string, destination: string, about: string, image: string, user?: { __typename?: 'User', id: string, image: string, name: string } | null, save?: Array<{ __typename?: 'Save', id: string, user: { __typename?: 'User', id: string } }> | null }> };
 
 export type SavePostMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -493,6 +498,38 @@ export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
 export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout {
+    id
+  }
+}
+    `;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const MeDocument = gql`
     query ME {
   me {
@@ -592,11 +629,15 @@ export const SearchDocument = gql`
     id
     title
     destination
+    about
+    image
     user {
       id
       image
+      name
     }
     save {
+      id
       user {
         id
       }

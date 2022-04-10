@@ -20,8 +20,13 @@ export const Feed: React.FC<Props> = ({ user }) => {
       setPins(data.feed);
     },
   });
-  const [search] = useSearchLazyQuery();
+  const [search] = useSearchLazyQuery({
+    onCompleted: (data) => {
+      setPins(data.search);
+    },
+  });
   const { categoryId } = useParams();
+
   useEffect(() => {
     if (categoryId) {
       search({
@@ -34,6 +39,7 @@ export const Feed: React.FC<Props> = ({ user }) => {
     }
   }, [categoryId, search, feed]);
   // console.log('feed', pins);
+  if (!pins) return <h2 className='text-center font bold'>No Pins found😞</h2>;
   if (feedLoading) {
     return <Spinner message='We are adding ideas to your feed' />;
   }

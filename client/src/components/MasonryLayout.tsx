@@ -21,7 +21,7 @@ const breakPoints = {
 export const MasonryLayout: React.FC<Props> = ({ pins, user }) => {
   return (
     <Masonry className='flex animate-slide-fwd' breakpointCols={breakPoints}>
-      {pins.map((pin) => (
+      {pins?.map((pin) => (
         <Pin key={pin?.id} pin={pin} className='w-max' user={user} />
       ))}
     </Masonry>

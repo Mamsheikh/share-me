@@ -5,19 +5,12 @@ import { IoIosArrowForward } from 'react-icons/io';
 import { User } from '../container/Home';
 
 import logo from '../assets/logo.png';
+import { categories } from '../utils/data';
 
 interface Props {
   user: User;
   closeToggle?: any;
 }
-
-const categories = [
-  { name: 'Animals' },
-  { name: 'Wallpapers' },
-  { name: 'Photography' },
-  { name: 'Gaming' },
-  { name: 'Coding' },
-];
 
 const isNotActiveStyle =
   'flex items-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out uppercase';
@@ -61,6 +54,11 @@ export const Sidebar: React.FC<Props> = ({ user, closeToggle }) => {
               }
               onClick={handleCloseSidebar}
             >
+              <img
+                src={category.image}
+                alt='category'
+                className='w-8 h-8 rounded-full shadow-sm '
+              />
               {category.name}
             </NavLink>
           ))}
