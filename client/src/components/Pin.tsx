@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { MdDownloadForOffline } from 'react-icons/md';
 import { AiTwotoneDelete } from 'react-icons/ai';
 import { BsFillArrowUpRightCircleFill } from 'react-icons/bs';
-import { Post, useSavePostMutation } from '../generated/graphql';
+import { FeedDocument, Post, useSavePostMutation } from '../generated/graphql';
 import { User } from '../container/Home';
 
 interface Props {
@@ -15,9 +15,22 @@ interface Props {
 export const Pin: React.FC<Props> = ({ pin, className, user }) => {
   const navigate = useNavigate();
   const [savePost, { loading }] = useSavePostMutation({
-    onCompleted: (data) => {
-      window.location.reload();
-    },
+    // update(cache, {data}) {
+    //   const {savePosts} = cache.readQuery({
+    //     query: FeedDocument
+    //   })
+
+    //   cache.writeQuery({
+    //     query: FeedDocument,
+    //     data: {
+    //       savePosts: [
+    //         data.savePost,
+    //         ...savePost
+    //       ]
+    //     }
+    //   })
+    refetchQueries: [{ query: FeedDocument }],
+    // }
   });
   const [postHovered, setPostHovered] = useState(false);
   const alreadySaved = !!pin?.save.filter((item) => item.user?.id === user?.id)

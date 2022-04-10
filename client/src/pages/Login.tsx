@@ -5,7 +5,7 @@ import { FcGoogle } from 'react-icons/fc';
 
 import shareVideo from '../assets/share.mp4';
 import logo from '../assets/logowhite.png';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { User } from '../container/Home';
 
 const GOOGLE_LOGIN = gql`
@@ -16,18 +16,6 @@ const GOOGLE_LOGIN = gql`
         id
         image
         name
-      }
-    }
-  }
-`;
-
-const REFRESH_AUTH = gql`
-  mutation {
-    refreshAuth {
-      accessToken
-      user {
-        name
-        id
       }
     }
   }
@@ -44,7 +32,7 @@ const Login: React.FC<Props> = ({ user }) => {
       navigate('/');
     }
   }, [navigate, user]);
-  const [googleLogin, { loading, error }] = useMutation(GOOGLE_LOGIN, {
+  const [googleLogin] = useMutation(GOOGLE_LOGIN, {
     onCompleted: (data) => {
       navigate('/', { replace: true });
     },

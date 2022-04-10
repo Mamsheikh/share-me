@@ -2,18 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { MasonryLayout, Spinner } from '../components';
 import { User } from '../container/Home';
-import {
-  Post,
-  useFeedLazyQuery,
-  useSearchLazyQuery,
-} from '../generated/graphql';
+import { useFeedLazyQuery, useSearchLazyQuery } from '../generated/graphql';
 
 interface Props {
   user: User;
 }
 
 export const Feed: React.FC<Props> = ({ user }) => {
-  const [loading, setLoading] = useState(false);
   const [pins, setPins] = useState(null);
   const [feed, { loading: feedLoading }] = useFeedLazyQuery({
     onCompleted: (data) => {
