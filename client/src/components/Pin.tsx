@@ -3,7 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { MdDownloadForOffline } from 'react-icons/md';
 import { AiTwotoneDelete } from 'react-icons/ai';
 import { BsFillArrowUpRightCircleFill } from 'react-icons/bs';
-import { FeedDocument, Post, useSavePostMutation } from '../generated/graphql';
+import {
+  FeedDocument,
+  Post,
+  useDeletePinMutation,
+  useSavePostMutation,
+} from '../generated/graphql';
 import { User } from '../container/Home';
 
 interface Props {
@@ -14,6 +19,21 @@ interface Props {
 
 export const Pin: React.FC<Props> = ({ pin, className, user }) => {
   const navigate = useNavigate();
+  const [deletePin] = useDeletePinMutation({
+    refetchQueries: [{ query: FeedDocument }],
+    // update(cache, { data }) {
+    //   const { pins } = cache.readQuery({
+    //     query: FeedDocument,
+    //   });
+
+    //   cache.writeQuery({
+    //     query: FeedDocument,
+    //     data: {
+    //       pins: pins.filter((pin) => pin.id !== data.deletePin.id),
+    //     },
+    //   });
+    // },
+  });
   const [savePost, { loading }] = useSavePostMutation({
     // update(cache, {data}) {
     //   const {savePosts} = cache.readQuery({
@@ -110,7 +130,11 @@ export const Pin: React.FC<Props> = ({ pin, className, user }) => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    // toggleSave(pin.id, user.id);
+                    deletePin({
+                      variables: {
+                        postId: pin?.id,
+                      },
+                    });
                   }}
                   type='button'
                   className='bg-white p-2 opacity-70 hover:opacity-100 text-black   text-base rounded-3xl hover:shadow-md outline-none'
